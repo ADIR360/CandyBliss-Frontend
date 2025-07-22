@@ -1,0 +1,83 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 70px;
+  background: #f7e9d6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-logo img {
+  height: 71px;
+}
+
+.navbar-logo p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: 'Pacifico', cursive;
+  color: #e67c7c;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.navbar-menu {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-menu li {
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.navbar-menu li:hover {
+  color: #e67c7c;
+  transform: translateY(-4px) scale(1.07);
+  box-shadow: 0 2px 8px rgba(230, 124, 124, 0.12);
+}
+
+.nav-login-cart {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.nav-login-cart button {
+  padding: 0.5rem 1.2rem;
+  background: #e67c7c;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.nav-login-cart button:hover {
+  background: #d35454;
+  box-shadow: 0 2px 8px rgba(230, 124, 124, 0.2);
+  transform: translateY(-3px) scale(1.04);
+}
+
+.nav-login-cart img {
+  height: 32px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.nav-login-cart img:hover {
+  transform: scale(1.1);
+}
