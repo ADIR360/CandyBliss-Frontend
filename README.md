@@ -34,7 +34,22 @@ src/
 ### Visual Structure
 
 ```mermaid
-<diagram_1>
+graph TD;
+  App[App.js] --> Shop[Pages/Shop.jsx]
+  App --> Cart[Pages/Cart.jsx]
+  App --> Login[Pages/LoginSignup.jsx]
+  Shop --> Navbar[Components/Navbar/Navbar.jsx]
+  Navbar --> NavbarCSS[Components/Navbar/Navbar.css]
+  Shop --> Assets[Components/Assets/]
+  Cart --> Assets
+  Shop --> ShopCSS[Pages/Shop.css]
+  Cart --> CartCSS[Pages/Cart.css]
+  App --> Index[index.js]
+  Index --> IndexCSS[index.css]
+  Assets --> all_product[all_product.js]
+  Assets --> new_collections[new_collections.js]
+  Assets --> data[data.js]
+  Assets --> Images[product images, icons, banners]
 ```
 
 ---
@@ -95,7 +110,12 @@ The new frontend led to a significant increase in sales, thanks to:
 ### Sales Growth Visualization
 
 ```mermaid
-<diagram_2>
+pie
+    title Sales Increase After Launch
+    "Before Launch" : 40
+    "After Launch (Month 1)" : 60
+    "After Launch (Month 2)" : 80
+    "After Launch (Month 3)" : 120
 ```
 
 ---
