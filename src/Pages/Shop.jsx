@@ -1,3 +1,5 @@
+// Add this state and functions to your ChocolateStore component
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Shop.css';
@@ -17,6 +19,7 @@ const ChocolateStore = ({
   const [showAddedToCartNotification, setShowAddedToCartNotification] = useState(false);
   const [addedProduct, setAddedProduct] = useState(null);
   const [isNavbarHidden, setIsNavbarHidden] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // New state
   const lastScrollY = useRef(window.scrollY);
 
   useEffect(() => {
@@ -31,6 +34,39 @@ const ChocolateStore = ({
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close mobile menu when clicking outside or on overlay
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMobileMenuOpen && !event.target.closest('.mobile-nav') && !event.target.closest('.hamburger')) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.body.classList.add('mobile-menu-open');
+      document.addEventListener('click', handleClickOutside);
+    } else {
+      document.body.classList.remove('mobile-menu-open');
+    }
+
+    return () => {
+      document.body.classList.remove('mobile-menu-open');
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
+  // Close mobile menu on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMobileMenuOpen]);
 
   const products = [
     {
@@ -87,56 +123,161 @@ const ChocolateStore = ({
     }, 2000);
   };
 
-  // ✅ Fixed - Only navigate without passing functions in state
   const navigateToCart = () => {
     navigate('/cart');
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleMobileNavClick = (section) => {
+    setActiveSection(section);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleMobileCartClick = () => {
+    setIsMobileMenuOpen(false);
+    navigateToCart();
+  };
+
+  // Updated Header component with mobile menu
   const Header = () => (
-    <header className={`header${isNavbarHidden ? ' header--hidden' : ''}`}>
-      <div className="container">
-        <nav className="nav">
-          <div className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', fontFamily: 'Montserrat, Poppins, Quicksand, sans-serif', fontWeight: 700, fontSize: '3.5rem', letterSpacing: '1px' }}>
-            <img src={logo} alt="logo" className="navbar-logo-img" />
+    <>
+      <header className={`header${isNavbarHidden ? ' header--hidden' : ''}`}>
+        <div className="container">
+          <nav className="nav">
+            <div className="logo" style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.2rem', 
+              fontFamily: 'Montserrat, Poppins, Quicksand, sans-serif', 
+              fontWeight: 700, 
+              fontSize: '3.5rem', 
+              letterSpacing: '1px' 
+            }}>
+              <img src={logo} alt="logo" className="navbar-logo-img" />
+              <span>CandyBliss</span>
+            </div>
+            
+            {/* Desktop Navigation */}
+            <ul className="nav-links">
+              <li 
+                className={activeSection === 'home' ? 'active' : ''}
+                onClick={() => setActiveSection('home')}
+              >
+                Home
+              </li>
+              <li 
+                className={activeSection === 'products' ? 'active' : ''}
+                onClick={() => setActiveSection('products')}
+              >
+                Products
+              </li>
+              <li 
+                className={activeSection === 'about' ? 'active' : ''}
+                onClick={() => setActiveSection('about')}
+              >
+                About
+              </li>
+              <li 
+                className={activeSection === 'contact' ? 'active' : ''}
+                onClick={() => setActiveSection('contact')}
+              >
+                Contact
+              </li>
+            </ul>
+            
+            {/* Desktop Cart Icon */}
+            <div className="cart-icon" onClick={navigateToCart}>
+              🛒
+              {getTotalItems() > 0 && (
+                <span className="cart-count">{getTotalItems()}</span>
+              )}
+            </div>
+            
+            {/* Mobile Hamburger Menu */}
+            <div 
+              className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`} 
+              onClick={toggleMobileMenu}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </nav>
+        </div>
+      </header>
+      
+      {/* Mobile Menu Overlay */}
+      <div 
+        className={`mobile-nav-overlay ${isMobileMenuOpen ? 'active' : ''}`}
+        onClick={() => setIsMobileMenuOpen(false)}
+      ></div>
+      
+      {/* Mobile Navigation Menu */}
+      <nav className={`mobile-nav ${isMobileMenuOpen ? 'active' : ''}`}>
+        <div className="mobile-nav-header">
+          <div className="mobile-nav-logo">
+            <img src={logo} alt="logo" />
             <span>CandyBliss</span>
           </div>
-          <ul className="nav-links">
-            <li 
+          <button 
+            className="mobile-nav-close"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            ✕
+          </button>
+        </div>
+        
+        <ul className="mobile-nav-links">
+          <li>
+            <button 
               className={activeSection === 'home' ? 'active' : ''}
-              onClick={() => setActiveSection('home')}
+              onClick={() => handleMobileNavClick('home')}
             >
-              Home
-            </li>
-            <li 
+              🏠 Home
+            </button>
+          </li>
+          <li>
+            <button 
               className={activeSection === 'products' ? 'active' : ''}
-              onClick={() => setActiveSection('products')}
+              onClick={() => handleMobileNavClick('products')}
             >
-              Products
-            </li>
-            <li 
+              🍫 Products
+            </button>
+          </li>
+          <li>
+            <button 
               className={activeSection === 'about' ? 'active' : ''}
-              onClick={() => setActiveSection('about')}
+              onClick={() => handleMobileNavClick('about')}
             >
-              About
-            </li>
-            <li 
+              ℹ️ About
+            </button>
+          </li>
+          <li>
+            <button 
               className={activeSection === 'contact' ? 'active' : ''}
-              onClick={() => setActiveSection('contact')}
+              onClick={() => handleMobileNavClick('contact')}
             >
-              Contact
-            </li>
-          </ul>
-          <div className="cart-icon" onClick={navigateToCart}>
-            🛒
+              📞 Contact
+            </button>
+          </li>
+        </ul>
+        
+        <div className="mobile-cart-section">
+          <button className="mobile-cart-button" onClick={handleMobileCartClick}>
+            🛒 View Cart
             {getTotalItems() > 0 && (
-              <span className="cart-count">{getTotalItems()}</span>
+              <span className="mobile-cart-count">{getTotalItems()}</span>
             )}
-          </div>
-        </nav>
-      </div>
-    </header>
+          </button>
+        </div>
+      </nav>
+    </>
   );
 
+  // Rest of your component remains the same...
   const Hero = () => (
     <section className="hero">
       <div className="container">
@@ -370,7 +511,6 @@ const ChocolateStore = ({
           <p><strong>{addedProduct?.name}</strong></p>
           <p></p>
         </div>
-
       </div>
     </div>
   );

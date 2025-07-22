@@ -1087,3 +1087,327 @@ body {
   margin-right: 0.5rem;
   vertical-align: middle;
 }
+/* Add these styles to your existing Shop.css file */
+
+/* Hamburger Menu Styles */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1001;
+}
+
+.hamburger:hover {
+  background: rgba(255, 215, 0, 0.2);
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  margin: 3px 0;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform-origin: center;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Mobile Navigation Overlay */
+.mobile-nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.mobile-nav-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile Navigation Menu */
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(135deg, #f7e9d6 0%, #fff5e6 100%);
+  z-index: 1000;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+}
+
+.mobile-nav.active {
+  right: 0;
+}
+
+.mobile-nav-header {
+  padding: 2rem 1.5rem 1rem;
+  border-bottom: 2px solid rgba(139, 69, 19, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-nav-logo {
+  font-family: 'Montserrat', 'Poppins', 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #8B4513;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mobile-nav-logo img {
+  height: 40px;
+  width: auto;
+}
+
+.mobile-nav-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  color: #8B4513;
+}
+
+.mobile-nav-close:hover {
+  background: rgba(139, 69, 19, 0.1);
+  transform: scale(1.1);
+}
+
+.mobile-nav-links {
+  list-style: none;
+  padding: 1rem 0;
+  margin: 0;
+}
+
+.mobile-nav-links li {
+  margin: 0;
+}
+
+.mobile-nav-links li a,
+.mobile-nav-links li button {
+  display: flex;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 1.1rem;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+}
+
+.mobile-nav-links li button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.mobile-nav-links li button:hover::before,
+.mobile-nav-links li button.active::before {
+  left: 100%;
+}
+
+.mobile-nav-links li button:hover,
+.mobile-nav-links li button.active {
+  background: rgba(255, 215, 0, 0.15);
+  color: #8B4513;
+  transform: translateX(10px);
+  font-weight: 600;
+}
+
+.mobile-nav-links li button.active {
+  background: rgba(255, 215, 0, 0.25);
+  border-left: 4px solid #FFD700;
+}
+
+.mobile-cart-section {
+  padding: 1.5rem;
+  margin-top: auto;
+  border-top: 2px solid rgba(139, 69, 19, 0.1);
+}
+
+.mobile-cart-button {
+  width: 100%;
+  background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+  color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+}
+
+.mobile-cart-button:hover {
+  background: linear-gradient(45deg, #FF8E8E, #FFB1B1);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+}
+
+.mobile-cart-count {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+
+/* Desktop Navigation Adjustments */
+@media (max-width: 768px) {
+  .nav {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0;
+  }
+  
+  .nav-links {
+    display: none;
+  }
+  
+  .hamburger {
+    display: flex;
+  }
+  
+  .cart-icon {
+    display: none; /* Hide desktop cart icon on mobile */
+  }
+  
+  .logo {
+    font-size: 1.2rem;
+  }
+  
+  .logo span {
+    font-size: 1.5rem;
+  }
+  
+  .header {
+    padding: 0.3rem 0;
+    min-height: 60px;
+  }
+  
+  body {
+    padding-top: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-nav {
+    width: 100%;
+    right: -100%;
+  }
+  
+  .logo {
+    font-size: 1rem;
+  }
+  
+  .logo span {
+    font-size: 1.3rem;
+  }
+  
+  .mobile-nav-header {
+    padding: 1.5rem 1rem 1rem;
+  }
+  
+  .mobile-nav-logo {
+    font-size: 1.3rem;
+  }
+  
+  .mobile-nav-logo img {
+    height: 35px;
+  }
+}
+
+/* Smooth scroll behavior when menu items are clicked */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent body scroll when mobile menu is open */
+body.mobile-menu-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+/* Animation for menu items */
+.mobile-nav-links li {
+  opacity: 0;
+  transform: translateX(50px);
+  animation: slideInFromRight 0.3s ease forwards;
+}
+
+.mobile-nav-links li:nth-child(1) { animation-delay: 0.1s; }
+.mobile-nav-links li:nth-child(2) { animation-delay: 0.2s; }
+.mobile-nav-links li:nth-child(3) { animation-delay: 0.3s; }
+.mobile-nav-links li:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideInFromRight {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Reset animation when menu is closed */
+.mobile-nav:not(.active) .mobile-nav-links li {
+  opacity: 0;
+  transform: translateX(50px);
+  animation: none;
+}
