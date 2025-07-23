@@ -5,6 +5,15 @@ CandyBliss is a modern, responsive e-commerce frontend for a handcrafted chocola
 
 ---
 
+## Features
+- **Fully Responsive Design:** All pages and components adapt seamlessly to mobile, tablet, and desktop screens.
+- **Mobile-Optimized Cart:** The cart page features an adaptive header, touch-friendly controls, and a grid layout that collapses perfectly on small screens. No more overlapping or excessive padding—everything is visually consistent and easy to use on any device.
+- **Dynamic Product Catalog:** Browse and add products with images, descriptions, and prices.
+- **WhatsApp Checkout:** One-tap checkout via WhatsApp for fast, personalized order handling.
+- **Modern UI/UX:** Clean, attractive design with smooth transitions and accessibility in mind.
+
+---
+
 ## Project Structure
 
 ```plaintext
@@ -69,6 +78,7 @@ graph TD;
 - Cart state is managed in the top-level App component and passed down as props.
 - Users can update quantities, remove items, and see a live total.
 - Cart is accessible from anywhere via the Navbar.
+- **Mobile-First Cart Experience:** The cart page header, grid, and sidebar are now fully adaptive. Padding, spacing, and sticky positioning are fixed for all screen sizes. Product images, controls, and text scale and stack for easy use on any device.
 
 ### 4. **Checkout via WhatsApp**
 - On checkout, the app generates a WhatsApp message with the order summary.
