@@ -153,12 +153,7 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
       <div className="cart-empty-icon">🛒</div>
       <h2 className="cart-empty-title">Your cart is empty</h2>
       <p className="cart-empty-description">Looks like you haven't added any delicious chocolates yet!</p>
-      <button 
-        onClick={() => navigate('/')} 
-        className="cart-continue-shopping-btn"
-      >
-        🍫 Continue Shopping
-      </button>
+
     </div>
   );
 
@@ -187,7 +182,7 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
   const CartItem = ({ item }) => (
     <div className="cart-item-card">
       <div className="cart-item-image">
-        <span className="cart-item-emoji">{item.emoji}</span>
+        <img src={item.img} alt={item.name} className="cart-item-img" />
       </div>
       
       <div className="cart-item-details">
