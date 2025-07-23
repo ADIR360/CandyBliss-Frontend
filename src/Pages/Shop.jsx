@@ -12,6 +12,8 @@ import ProdImg5 from './ProdImg5.jpeg';
 import ProdImg6 from './ProdImg6.jpeg';
 import LVbro from './LVbro.jpeg';
 import LVsis from './LVsis.jpeg';
+import ProdImg7 from './ProdImg7.jpeg';
+import ProdImg8 from './ProdImg8.jpeg';
 
 
 const ChocolateStore = ({ 
@@ -133,6 +135,20 @@ const ChocolateStore = ({
       description: "12 pcs - 250grms",
       price: 450.00,
       img: ProdImg5
+    },
+    {
+      id: 9,
+      name: "Chocolate Coated Fox Nuts",
+      description: "1 box - 250grms",
+      price: 450.00,
+      img: ProdImg7
+    },
+    {
+      id: 10,
+      name: "Mango Bloom Chocolate Bar",
+      description: "(customizable)1 pcs - 100grms",
+      price: 240.00,
+      img: ProdImg8
     }
   ];
 
