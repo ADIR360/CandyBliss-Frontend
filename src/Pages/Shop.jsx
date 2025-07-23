@@ -4,6 +4,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Shop.css';
 import logo from '../Components/Assets/logo.png';
+import ProdImg1 from './ProdImg1.jpeg';
+import ProdImg2 from './ProdImg2.jpeg';
+import ProdImg3 from './ProdImg3.jpeg';
+import ProdImg4 from './ProdImg4.jpeg';
+import ProdImg5 from './ProdImg5.jpeg';
+import ProdImg6 from './ProdImg6.jpeg';
+import LVbro from './LVbro.jpeg';
+import LVsis from './LVsis.jpeg';
+
 
 const ChocolateStore = ({ 
   cartItems = [], 
@@ -71,45 +80,59 @@ const ChocolateStore = ({
   const products = [
     {
       id: 1,
-      name: "Dark Chocolate Bliss",
-      description: "Rich 70% dark chocolate with hints of vanilla and sea salt",
-      price: 12.99,
-      emoji: "🍫"
+      name: "Strawberry Heart Chocolate Bar",
+      description: "1 pcs - 80grms",
+      price: 180.00,
+      img: ProdImg2
     },
     {
       id: 2,
-      name: "Milk Chocolate Dreams",
-      description: "Creamy milk chocolate made with premium Belgian cocoa",
-      price: 10.99,
-      emoji: "🍪"
+      name: "Rascality flavored bar",
+      description: "1 pcs - 80grms",
+      price: 160.00,
+      img: ProdImg1
     },
     {
       id: 3,
-      name: "White Chocolate Heaven",
-      description: "Smooth white chocolate with crushed almonds and honey",
-      price: 11.99,
-      emoji: "🤍"
+      name: "Rakshabandhan Chocolate Bar - Love You Bro",
+      description: "1 pcs - 100grms",
+      price: 220.00,
+      img: LVbro
     },
     {
       id: 4,
-      name: "Truffle Collection",
-      description: "Assorted handcrafted truffles with exotic flavors",
-      price: 24.99,
-      emoji: "🍰"
+      name: "Rakshabandhan Chocolate Bar - Love You Sis",
+      description: "1 pcs - 100grms",
+      price: 220.00,
+      img: LVsis
     },
     {
       id: 5,
-      name: "Chocolate Bonbons",
-      description: "Elegant bonbons filled with ganache and fruit centers",
-      price: 18.99,
-      emoji: "🍬"
+      name: "Mango Chocolate Bar",
+      description: "1 pcs - 80grms",
+      price: 180.00,
+      img: ProdImg6
     },
     {
       id: 6,
-      name: "Hot Chocolate Mix",
-      description: "Premium hot chocolate powder for the perfect cozy drink",
-      price: 8.99,
-      emoji: "☕"
+      name: "Exquisite Truffle Collection",
+      description: "12 pcs - 250grms",
+      price: 450.00,
+      img: ProdImg3
+    },
+    {
+      id: 7,
+      name: "Premium Dry Fruit Chocolates",
+      description: "1 Bar - 200grms, 6 mini bites - 15grms",
+      price: 450.00,
+      img: ProdImg4
+    },
+    {
+      id: 8,
+      name: "Dates Truffle Box assorted drizzled truffle",
+      description: "12 pcs - 250grms",
+      price: 450.00,
+      img: ProdImg5
     }
   ];
 
@@ -305,7 +328,7 @@ const ChocolateStore = ({
   const ProductCard = ({ product }) => (
     <div className="product-card">
       <div className="product-image">
-        <span className="product-emoji">{product.emoji}</span>
+        <img src={product.img} alt={product.name} className="product-img" />
         <div className="product-overlay">
           <button 
             className="quick-add"

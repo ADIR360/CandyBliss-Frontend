@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Cart.css';
 
@@ -6,10 +6,59 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
   const navigate = useNavigate();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [showOrderSuccess, setShowOrderSuccess] = useState(false);
+  
+  // Navbar visibility states
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   // Replace with your actual WhatsApp number (include country code without +)
-  // Example formats: "919876543210" (India), "447123456789" (UK), "12345678901" (US)
-  const WHATSAPP_NUMBER = "916397116830"; // Your actual WhatsApp number
+  const WHATSAPP_NUMBER = "916397116830";
+
+  // Scroll handler for dynamic navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Show navbar if at top of page
+      if (currentScrollY === 0) {
+        setIsNavbarVisible(true);
+        setLastScrollY(currentScrollY);
+        return;
+      }
+
+      // Only update visibility if scroll difference is significant (prevents jittery behavior)
+      if (Math.abs(currentScrollY - lastScrollY) < 10) {
+        return;
+      }
+
+      // Hide navbar when scrolling down, show when scrolling up
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down & past threshold
+        setIsNavbarVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        // Scrolling up
+        setIsNavbarVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    // Add scroll listener with throttling for better performance
+    let ticking = false;
+    const throttledHandleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', throttledHandleScroll, { passive: true });
+    
+    return () => window.removeEventListener('scroll', throttledHandleScroll);
+  }, [lastScrollY]);
 
   const createWhatsAppMessage = () => {
     const itemsList = cartItems.map(item => 
@@ -32,23 +81,16 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
     setIsCheckingOut(true);
     
     try {
-      // Create WhatsApp URL
       const whatsappMessage = createWhatsAppMessage();
       const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
       
-      console.log('WhatsApp URL:', whatsappURL); // For debugging
-      
-      // Try multiple approaches for better compatibility
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
       if (isMobile) {
-        // On mobile, try to open WhatsApp app directly
         window.location.href = whatsappURL;
       } else {
-        // On desktop, open in new tab
         const newWindow = window.open(whatsappURL, '_blank');
         if (!newWindow) {
-          // If popup blocked, try direct navigation
           window.location.href = whatsappURL;
         }
       }
@@ -60,7 +102,6 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
       return;
     }
     
-    // Simulate order process
     setTimeout(() => {
       setIsCheckingOut(false);
       setShowOrderSuccess(true);
@@ -77,11 +118,11 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
   };
 
   const calculateTax = () => {
-    return calculateSubtotal() * 0.18; // 18% tax
+    return calculateSubtotal() * 0.18;
   };
 
   const calculateShipping = () => {
-    return calculateSubtotal() >= 550 ? 0 : 150.00; // Free shipping over ₹550
+    return calculateSubtotal() >= 550 ? 0 : 150.00;
   };
 
   const calculateTotal = () => {
@@ -121,9 +162,9 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
     </div>
   );
 
-  // Cart Header Component
+  // Dynamic Cart Header Component
   const CartHeader = () => (
-    <div className="cart-page-header">
+    <div className={`cart-page-header ${isNavbarVisible ? 'cart-header-visible' : 'cart-header-hidden'}`}>
       <div className="cart-page-container">
         <button 
           onClick={() => navigate('/')} 
@@ -211,13 +252,7 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
       </div>
       
       <div className="cart-continue-shopping-section">
-        <button 
-          onClick={() => navigate('/')} 
-          className="cart-continue-shopping-btn cart-secondary-btn"
-          disabled={isCheckingOut}
-        >
-          ← Continue Shopping
-        </button>
+
       </div>
     </div>
   );
@@ -278,9 +313,6 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
         )}
       </button>
       
-      <div className="cart-whatsapp-info">
-      </div>
-      
       <div className="cart-payment-methods">
         <p>We accept:</p>
         <div className="cart-payment-icons">
@@ -305,7 +337,8 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
     <div className="cart-page">
       <CartHeader />
       
-      <div className="cart-page-container">
+      {/* Add padding top to account for sticky header */}
+      <div className="cart-page-container" style={{ paddingTop: '120px' }}>
         {cartItems.length === 0 ? (
           <EmptyCartContent />
         ) : (
