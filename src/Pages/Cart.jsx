@@ -122,7 +122,7 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
   };
 
   const calculateShipping = () => {
-    return calculateSubtotal() >= 550 ? 0 : 150.00;
+    return calculateSubtotal() >= 350 ? 0 : 50.00;
   };
 
   const calculateTotal = () => {
@@ -281,7 +281,7 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
         
         {calculateSubtotal() < 550 && (
           <div className="cart-shipping-notice">
-            <p>💡 Add ₹{(550 - calculateSubtotal()).toFixed(2)} more for free shipping!</p>
+            <p>💡 Add ₹{(350 - calculateSubtotal()).toFixed(2)} more for free shipping!</p>
           </div>
         )}
         

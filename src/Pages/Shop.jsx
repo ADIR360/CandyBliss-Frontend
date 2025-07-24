@@ -84,35 +84,35 @@ const ChocolateStore = ({
       id: 1,
       name: "Strawberry Heart Chocolate Bar",
       description: "1 pcs - 80grms",
-      price: 180.00,
+      price: 170.00,
       img: ProdImg2
     },
     {
       id: 2,
       name: "Rascality flavored bar",
       description: "1 pcs - 80grms",
-      price: 160.00,
+      price: 150.00,
       img: ProdImg1
     },
     {
       id: 3,
       name: "Rakshabandhan Chocolate Bar - Love You Bro",
       description: "1 pcs - 100grms",
-      price: 220.00,
+      price: 200.00,
       img: LVbro
     },
     {
       id: 4,
       name: "Rakshabandhan Chocolate Bar - Love You Sis",
       description: "1 pcs - 100grms",
-      price: 220.00,
+      price: 200.00,
       img: LVsis
     },
     {
       id: 5,
       name: "Mango Chocolate Bar",
       description: "1 pcs - 80grms",
-      price: 180.00,
+      price: 170.00,
       img: ProdImg6
     },
     {
@@ -147,7 +147,7 @@ const ChocolateStore = ({
       id: 10,
       name: "Mango Bloom Chocolate Bar",
       description: "(customizable)1 pcs - 100grms",
-      price: 240.00,
+      price: 220.00,
       img: ProdImg8
     }
   ];
