@@ -1,6 +1,6 @@
 // Add this state and functions to your ChocolateStore component
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Shop.css';
 import logo from '../Components/Assets/logo.png';
@@ -152,7 +152,7 @@ const ChocolateStore = ({
     }
   ];
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = useCallback((product) => {
     addToCart(product);
     setAddedProduct(product);
     setShowAddedToCartNotification(true);
@@ -160,25 +160,20 @@ const ChocolateStore = ({
       setShowAddedToCartNotification(false);
       setAddedProduct(null);
     }, 2000);
-  };
+  }, [addToCart]);
 
-  const navigateToCart = () => {
+  const navigateToCart = useCallback(() => {
     navigate('/cart');
-  };
+  }, [navigate]);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen((open) => !open);
+  }, []);
 
-  const handleMobileNavClick = (section) => {
+  const handleMobileNavClick = useCallback((section) => {
     setActiveSection(section);
     setIsMobileMenuOpen(false);
-  };
-
-  const handleMobileCartClick = () => {
-    setIsMobileMenuOpen(false);
-    navigateToCart();
-  };
+  }, []);
 
   // Updated Header component with mobile menu
   const Header = () => (
@@ -225,16 +220,28 @@ const ChocolateStore = ({
               >
                 Contact
               </li>
+              <li 
+                className={activeSection === 'order-tracking' ? 'active' : ''}
+                onClick={() => { setActiveSection('order-tracking'); navigate('/order-tracking'); }}
+              >
+                Order Tracking
+              </li>
             </ul>
             
             {/* Desktop Cart Icon */}
-            <div className="cart-icon" onClick={navigateToCart}>
+            <div className="cart-icon desktop-only" onClick={navigateToCart}>
               🛒
               {getTotalItems() > 0 && (
                 <span className="cart-count">{getTotalItems()}</span>
               )}
             </div>
-            
+            {/* Mobile Cart Icon (left of hamburger) */}
+            <div className="cart-icon mobile-only" onClick={navigateToCart} style={{marginRight: '0.5rem'}}>
+              🛒
+              {getTotalItems() > 0 && (
+                <span className="cart-count">{getTotalItems()}</span>
+              )}
+            </div>
             {/* Mobile Hamburger Menu */}
             <div 
               className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`} 
@@ -302,16 +309,17 @@ const ChocolateStore = ({
               📞 Contact
             </button>
           </li>
+          <li>
+            <button 
+              className={activeSection === 'order-tracking' ? 'active' : ''}
+              onClick={() => { setActiveSection('order-tracking'); setIsMobileMenuOpen(false); navigate('/order-tracking'); }}
+            >
+             🚚 Order Tracking
+            </button>
+          </li>
         </ul>
         
-        <div className="mobile-cart-section">
-          <button className="mobile-cart-button" onClick={handleMobileCartClick}>
-            🛒 View Cart
-            {getTotalItems() > 0 && (
-              <span className="mobile-cart-count">{getTotalItems()}</span>
-            )}
-          </button>
-        </div>
+        {/* Removed mobile cart section from hamburger menu */}
       </nav>
     </>
   );
@@ -341,7 +349,7 @@ const ChocolateStore = ({
     </section>
   );
 
-  const ProductCard = ({ product }) => (
+  const ProductCard = React.memo(({ product }) => (
     <div className="product-card">
       <div className="product-image">
         <img src={product.img} alt={product.name} className="product-img" />
@@ -368,7 +376,7 @@ const ChocolateStore = ({
         </div>
       </div>
     </div>
-  );
+  ));
 
   const Products = () => (
     <section className="products-section">
@@ -470,7 +478,7 @@ const ChocolateStore = ({
     </section>
   );
 
-  const CartModal = ({ cartItems, updateQuantity, removeFromCart, getTotalPrice, onClose }) => (
+  const CartModal = React.memo(({ cartItems, updateQuantity, removeFromCart, getTotalPrice, onClose }) => (
     <div className="cart-modal" onClick={onClose}>
       <div className="cart-content" onClick={e => e.stopPropagation()}>
         <div className="cart-header">
@@ -540,9 +548,9 @@ const ChocolateStore = ({
         )}
       </div>
     </div>
-  );
+  ));
 
-  const AddedToCartNotification = () => (
+  const AddedToCartNotification = React.memo(() => (
     <div className={`added-to-cart-notification ${showAddedToCartNotification ? 'show' : ''}`}>
       <div className="notification-content">
         <span className="notification-emoji">{addedProduct?.emoji}</span>
@@ -552,9 +560,9 @@ const ChocolateStore = ({
         </div>
       </div>
     </div>
-  );
+  ));
 
-  const Footer = () => (
+  const Footer = React.memo(() => (
     <footer className="footer">
       <div className="container">
         <div className="footer-content">
@@ -591,7 +599,7 @@ const ChocolateStore = ({
         </div>
       </div>
     </footer>
-  );
+  ));
 
   return (
     <div className="app">

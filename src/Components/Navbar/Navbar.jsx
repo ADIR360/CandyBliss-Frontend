@@ -15,6 +15,7 @@ const Navbar = () => {
         <li><Link to='/product'>Products</Link></li>
         <li>About us</li>
         <li><Link to='/cart'>Cart</Link></li>
+        <li><Link to='/order-tracking'>Order Tracking</Link></li>
       </ul>
       <div className='nav-login-cart'>
         <Link to='/login'><button>Login</button></Link>

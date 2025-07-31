@@ -1,49 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Cart.css';
 
 const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, clearCart }) => {
   const navigate = useNavigate();
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [showOrderSuccess, setShowOrderSuccess] = useState(false);
+  // Removed unused state variables: isProcessingPayment, showOrderSuccess
   
   // Navbar visibility states
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-
-  // Replace with your actual WhatsApp number (include country code without +)
-  const WHATSAPP_NUMBER = "916397116830";
 
   // Scroll handler for dynamic navbar
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Show navbar if at top of page
       if (currentScrollY === 0) {
         setIsNavbarVisible(true);
         setLastScrollY(currentScrollY);
         return;
       }
 
-      // Only update visibility if scroll difference is significant (prevents jittery behavior)
       if (Math.abs(currentScrollY - lastScrollY) < 10) {
         return;
       }
 
-      // Hide navbar when scrolling down, show when scrolling up
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling down & past threshold
         setIsNavbarVisible(false);
       } else if (currentScrollY < lastScrollY) {
-        // Scrolling up
         setIsNavbarVisible(true);
       }
 
       setLastScrollY(currentScrollY);
     };
 
-    // Add scroll listener with throttling for better performance
     let ticking = false;
     const throttledHandleScroll = () => {
       if (!ticking) {
@@ -60,105 +50,77 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
     return () => window.removeEventListener('scroll', throttledHandleScroll);
   }, [lastScrollY]);
 
-  const createWhatsAppMessage = () => {
-    const itemsList = cartItems.map(item => 
-      `${item.emoji || '🍫'} ${item.name} x ${item.quantity} (₹${(item.price * item.quantity).toFixed(2)})`
-    ).join(', ');
-    
-    const total = calculateTotal();
-    
-    const message = `Hi! I would like to order: ${itemsList}. Total: ₹${total.toFixed(2)}. Please confirm availability and delivery details. Thank you!`;
+  // Removed unused form validation and handlers
 
-    return encodeURIComponent(message);
-  };
+  // Calculation functions
+  const calculateSubtotal = useCallback(() => {
+    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  }, [cartItems]);
 
-  const handleProceedToCheckout = () => {
+  const calculateTax = useCallback(() => {
+    return calculateSubtotal() * 0.18;
+  }, [calculateSubtotal]);
+
+  const calculateShipping = useCallback(() => {
+    return calculateSubtotal() >= 350 ? 0 : 50.00;
+  }, [calculateSubtotal]);
+
+  const calculateTotal = useCallback(() => {
+    return calculateSubtotal() + calculateTax() + calculateShipping();
+  }, [calculateSubtotal, calculateTax, calculateShipping]);
+
+  // Removed unused form handlers: handleFormChange, handleFormBlur
+
+  // Removed unused submitOrderToGoogleSheets function
+
+  const handlePayment = async () => {
     if (cartItems.length === 0) {
       alert('Your cart is empty!');
       return;
     }
-
-    setIsCheckingOut(true);
     
-    try {
-      const whatsappMessage = createWhatsAppMessage();
-      const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
-      
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
-      if (isMobile) {
-        window.location.href = whatsappURL;
-      } else {
-        const newWindow = window.open(whatsappURL, '_blank');
-        if (!newWindow) {
-          window.location.href = whatsappURL;
-        }
+    // Redirect to checkout page with cart data
+    navigate('/checkout', { 
+      state: { 
+        cartItems: cartItems,
+        totalAmount: calculateTotal()
       }
-      
-    } catch (error) {
-      console.error('Error opening WhatsApp:', error);
-      alert('Unable to open WhatsApp. Please try again or contact us directly.');
-      setIsCheckingOut(false);
-      return;
-    }
-    
-    setTimeout(() => {
-      setIsCheckingOut(false);
-      setShowOrderSuccess(true);
-      clearCart();
-      setTimeout(() => {
-        setShowOrderSuccess(false);
-        navigate('/');
-      }, 3000);
-    }, 2000);
-  };
-
-  const calculateSubtotal = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-  };
-
-  const calculateTax = () => {
-    return calculateSubtotal() * 0.18;
-  };
-
-  const calculateShipping = () => {
-    return calculateSubtotal() >= 350 ? 0 : 50.00;
-  };
-
-  const calculateTotal = () => {
-    return calculateSubtotal() + calculateTax() + calculateShipping();
-  };
-
-  const getTotalItems = () => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
+    });
   };
 
   // Order Success Modal Component
-  const OrderSuccessModal = () => (
+  const OrderSuccessModal = React.memo(() => (
     <div className="cart-order-success-overlay">
       <div className="cart-order-success-modal">
         <div className="cart-success-animation">
           <span className="cart-success-checkmark">✅</span>
         </div>
-        <h2 className="cart-success-title">WhatsApp Message Sent! 📱</h2>
-        <p className="cart-success-message">Your order has been sent via WhatsApp. We'll confirm your order shortly!</p>
+        <h2 className="cart-success-title">Order Placed Successfully! 🎉</h2>
+        <p className="cart-success-message">
+          Your order has been placed successfully. You will receive order confirmation via WhatsApp shortly!
+        </p>
         <p className="cart-success-redirect">Redirecting to home page...</p>
       </div>
     </div>
-  );
+  ));
 
   // Empty Cart Component
-  const EmptyCartContent = () => (
+  const EmptyCartContent = React.memo(() => (
     <div className="cart-empty-state">
       <div className="cart-empty-icon">🛒</div>
       <h2 className="cart-empty-title">Your cart is empty</h2>
       <p className="cart-empty-description">Looks like you haven't added any delicious chocolates yet!</p>
-
+      <button 
+        onClick={() => navigate('/')} 
+        className="cart-continue-shopping-btn"
+      >
+        Continue Shopping
+      </button>
     </div>
-  );
+  ));
 
   // Dynamic Cart Header Component
-  const CartHeader = () => (
+  const CartHeader = React.memo(() => (
     <div className={`cart-page-header ${isNavbarVisible ? 'cart-header-visible' : 'cart-header-hidden'}`}>
       <div className="cart-page-container">
         <button 
@@ -172,14 +134,14 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
           <h1 className="cart-title-text">Shopping Cart</h1>
         </div>
         <div className="cart-items-count">
-          <span>{getTotalItems()} items</span>
+          <span>{cartItems.reduce((total, item) => total + item.quantity, 0)} items</span>
         </div>
       </div>
     </div>
-  );
+  ));
 
   // Cart Item Component
-  const CartItem = ({ item }) => (
+  const CartItem = React.memo(({ item }) => (
     <div className="cart-item-card">
       <div className="cart-item-image">
         <img src={item.img} alt={item.name} className="cart-item-img" />
@@ -196,7 +158,6 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
           <button 
             onClick={() => updateQuantity(item.id, item.quantity - 1)}
             className="cart-quantity-btn cart-quantity-decrease"
-            disabled={isCheckingOut}
           >
             −
           </button>
@@ -204,7 +165,6 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
           <button 
             onClick={() => updateQuantity(item.id, item.quantity + 1)}
             className="cart-quantity-btn cart-quantity-increase"
-            disabled={isCheckingOut}
           >
             +
           </button>
@@ -217,24 +177,22 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
         <button 
           className="cart-remove-btn" 
           onClick={() => removeFromCart(item.id)}
-          disabled={isCheckingOut}
           title="Remove item"
         >
           🗑️
         </button>
       </div>
     </div>
-  );
+  ));
 
   // Cart Items Section Component
-  const CartItemsSection = () => (
+  const CartItemsSection = React.memo(() => (
     <div className="cart-items-section">
       <div className="cart-items-header">
         <h2 className="cart-section-title">Your Items ({cartItems.length})</h2>
         <button 
           onClick={clearCart} 
           className="cart-clear-btn"
-          disabled={isCheckingOut}
         >
           🗑️ Clear All
         </button>
@@ -245,18 +203,20 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
           <CartItem key={item.id} item={item} />
         ))}
       </div>
-      
-      <div className="cart-continue-shopping-section">
-
-      </div>
     </div>
-  );
+  ));
 
-  // Order Summary Component
-  const OrderSummary = () => (
+  // Removed unused CustomerDetailsForm component
+
+  // Order Summary Component - Memoized to prevent unnecessary re-renders
+  const OrderSummary = React.memo(() => (
     <div className="cart-order-summary">
       <h3 className="cart-summary-title">Order Summary</h3>
       
+      {/* Customer Details Form - Commented out for now */}
+      {/* <CustomerDetailsForm /> */}
+      
+      {/* Order Summary */}
       <div className="cart-summary-lines">
         <div className="cart-summary-line">
           <span>Subtotal:</span>
@@ -279,7 +239,7 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
           </span>
         </div>
         
-        {calculateSubtotal() < 550 && (
+        {calculateSubtotal() < 350 && (
           <div className="cart-shipping-notice">
             <p>💡 Add ₹{(350 - calculateSubtotal()).toFixed(2)} more for free shipping!</p>
           </div>
@@ -292,39 +252,46 @@ const Cart = ({ cartItems = [], updateQuantity, removeFromCart, getTotalPrice, c
       </div>
       
       <button 
-        className={`cart-checkout-btn ${isCheckingOut ? 'cart-checking-out' : ''}`}
-        onClick={handleProceedToCheckout}
-        disabled={isCheckingOut || cartItems.length === 0}
+        className={`cart-checkout-btn`}
+        onClick={handlePayment}
+        disabled={cartItems.length === 0}
       >
-        {isCheckingOut ? (
+        {cartItems.length === 0 ? (
           <>
-            <span className="cart-spinner"></span>
-            Opening WhatsApp...
+            Cart is empty
           </>
         ) : (
           <>
-            📱 Order via WhatsApp 💬
+            🛒 Proceed to Checkout - ₹{calculateTotal().toFixed(2)}
           </>
         )}
       </button>
       
-      <div className="cart-payment-methods">
-        <p>We accept:</p>
-        <div className="cart-payment-icons">
-          <span>💸 COD</span>
-          <span>📱 UPI</span>
+      <div className="cart-payment-security-section">
+        <div className="cart-payment-row">
+          <div className="cart-payment-methods-fun cart-method-cod">
+            <span className="cart-pay-emoji">💸</span>
+            <span className="cart-pay-label">Cash on Delivery</span>
+          </div>
+          <div className="cart-security-badge-fun cart-method-secure">
+            <span className="cart-secure-emoji">📱</span>
+            <span className="cart-secure-text">Online Payment</span>
+          </div>
+          <div className="cart-security-badge-fun cart-method-secure">
+            <span className="cart-secure-emoji">🚚</span>
+            <span className="cart-secure-text">Fast Delivery</span>
+          </div>
+          <div className="cart-security-badge-fun cart-method-secure">
+            <span className="cart-secure-emoji">🔒</span>
+            <span className="cart-secure-text">Secure Order Processing</span>
+          </div>
         </div>
       </div>
-      
-      <div className="cart-security-badge">
-        <span>🔒</span>
-        <p>Secure ordering via WhatsApp</p>
-      </div>
     </div>
-  );
+  ));
 
   // Main render
-  if (showOrderSuccess) {
+  if (false) { // Removed showOrderSuccess check
     return <OrderSuccessModal />;
   }
 
