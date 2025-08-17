@@ -504,6 +504,15 @@ const ChocolateStore = ({
       setCurrentImageIndex(index);
     };
 
+    const addToCartWithCorrectImage = () => {
+      // Create a cart item with the correct image for gift hampers
+      const cartItem = {
+        ...product,
+        img: product.category === "gift-hampers" ? productImages[0] : product.img // Use first image for cart
+      };
+      handleAddToCart(cartItem);
+    };
+
     return (
       <div className="product-card">
         <div className="product-image">
@@ -560,7 +569,7 @@ const ChocolateStore = ({
             <span className="product-price">₹{product.price}</span>
             <button 
               className="add-to-cart"
-              onClick={() => handleAddToCart(product)}
+              onClick={addToCartWithCorrectImage}
             >
               Add to Cart 🛒
             </button>
