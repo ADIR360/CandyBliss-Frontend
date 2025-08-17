@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Analytics } from "@vercel/analytics/react";
 import './Shop.css';
 import logo from '../Components/Assets/logo.png';
 import ProdImg1 from './ProdImg1.jpeg';
@@ -466,7 +467,7 @@ const ChocolateStore = ({
     </section>
   );
 
-  const ProductCard = React.memo(({ product }) => {
+  const ProductCard = React.memo(({ product, addToCart }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     
     // For gift hampers, use different images based on product ID
@@ -510,7 +511,7 @@ const ChocolateStore = ({
         ...product,
         img: product.category === "gift-hampers" ? productImages[0] : product.img // Use first image for cart
       };
-      handleAddToCart(cartItem);
+      addToCart(cartItem);
     };
 
     return (
@@ -673,7 +674,7 @@ const ChocolateStore = ({
               <p className="category-description">Discover our premium selection of artisanal chocolates, each crafted with love and the finest ingredients.</p>
               <div className="products-grid">
                 {sortedChocolateProducts.map(product => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product.id} product={product} addToCart={addToCart} />
                 ))}
               </div>
             </div>
@@ -686,7 +687,7 @@ const ChocolateStore = ({
               <p className="category-description">Perfect for every occasion - from romantic gestures to corporate gifting, our hampers are thoughtfully curated.</p>
               <div className="products-grid">
                 {sortedGiftHamperProducts.map(product => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product.id} product={product} addToCart={addToCart} />
                 ))}
               </div>
             </div>
@@ -929,6 +930,7 @@ const ChocolateStore = ({
         />
       )}
       <AddedToCartNotification />
+      <Analytics />
     </div>
   );
 };
