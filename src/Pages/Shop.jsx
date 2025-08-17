@@ -14,6 +14,26 @@ import LVbro from './LVbro.jpeg';
 import LVsis from './LVsis.jpeg';
 import ProdImg7 from './ProdImg7.jpeg';
 import ProdImg8 from './ProdImg8.jpeg';
+import GiftBox1 from './gift-box1-1.jpg';
+import GiftBox2 from './gift-box1-2.jpg';
+import GiftBox3 from './gift-box2-1.jpg';
+import GiftBox4 from './gift-box2-2.jpg';
+import GiftBox5 from './gift-box3-1.jpg';
+import GiftBox6 from './gift-box3-2.jpg';
+import GiftBox7 from './gift-box4-1.jpg';
+import GiftBox8 from './gift-box4-2.jpg';
+import GiftBox9 from './gift-box5-1.jpg';
+import GiftBox10 from './gift-box5-2.jpg';
+import GiftBox11 from './gift-box6-1.jpg';
+import GiftBox12 from './gift-box6-2.jpg';
+import GiftBox13 from './gift-box7-1.jpg';
+import GiftBox14 from './gift-box7-2.jpg';
+import GiftBox15 from './gift-box8-1.jpg';
+import GiftBox16 from './gift-box8-2.jpg';
+import GiftBox17 from './gift-box9-1.jpg';
+import GiftBox18 from './gift-box9-2.jpg';
+import GiftBox19 from './gift-box10-1.jpg';
+import GiftBox20 from './gift-box10-2.jpg';
 
 
 const ChocolateStore = ({ 
@@ -31,6 +51,8 @@ const ChocolateStore = ({
   const [addedProduct, setAddedProduct] = useState(null);
   const [isNavbarHidden, setIsNavbarHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // New state
+  const [activeProductCategory, setActiveProductCategory] = useState('gift-hampers'); // Changed default to gift-hampers
+  const [sortBy, setSortBy] = useState('default'); // Moved sort state to main component level
   const lastScrollY = useRef(window.scrollY);
 
   useEffect(() => {
@@ -85,70 +107,165 @@ const ChocolateStore = ({
       name: "Strawberry Heart Chocolate Bar",
       description: "1 pcs - 80grms",
       price: 170.00,
-      img: ProdImg2
+      img: ProdImg2,
+      category: "chocolates"
     },
     {
       id: 2,
       name: "Rascality flavored bar",
       description: "1 pcs - 80grms",
       price: 150.00,
-      img: ProdImg1
+      img: ProdImg1,
+      category: "chocolates"
     },
     {
       id: 3,
       name: "Rakshabandhan Chocolate Bar - Love You Bro",
       description: "1 pcs - 100grms",
       price: 200.00,
-      img: LVbro
+      img: LVbro,
+      category: "chocolates"
     },
     {
       id: 4,
       name: "Rakshabandhan Chocolate Bar - Love You Sis",
       description: "1 pcs - 100grms",
       price: 200.00,
-      img: LVsis
+      img: LVsis,
+      category: "chocolates"
     },
     {
       id: 5,
       name: "Mango Chocolate Bar",
       description: "1 pcs - 80grms",
       price: 170.00,
-      img: ProdImg6
+      img: ProdImg6,
+      category: "chocolates"
     },
     {
       id: 6,
       name: "Exquisite Truffle Collection",
       description: "12 pcs - 250grms",
       price: 450.00,
-      img: ProdImg3
+      img: ProdImg3,
+      category: "chocolates"
     },
     {
       id: 7,
       name: "Premium Dry Fruit Chocolates",
       description: "1 Bar - 200grms, 6 mini bites - 15grms",
       price: 450.00,
-      img: ProdImg4
+      img: ProdImg4,
+      category: "chocolates"
     },
     {
       id: 8,
       name: "Dates Truffle Box assorted drizzled truffle",
       description: "12 pcs - 250grms",
       price: 450.00,
-      img: ProdImg5
+      img: ProdImg5,
+      category: "chocolates"
     },
     {
       id: 9,
       name: "Chocolate Coated Fox Nuts",
       description: "1 box - 250grms",
       price: 450.00,
-      img: ProdImg7
+      img: ProdImg7,
+      category: "chocolates"
     },
     {
       id: 10,
       name: "Mango Bloom Chocolate Bar",
       description: "(customizable)1 pcs - 100grms",
       price: 220.00,
-      img: ProdImg8
+      img: ProdImg8,
+      category: "chocolates"
+    },
+    // Gift Hampers - Reordered according to specified sequence
+    // Row 1: id 17, id 19, id 15
+    {
+      id: 17,
+      name: "Festival of Flavors",
+      description: "Elegant packaging for business gifting",
+      price: 2700.00,
+      img: GiftBox1,
+      category: "gift-hampers"
+    },
+    {
+      id: 19,
+      name: "Saffon Harvest",
+      description: "Elegant packaging for business gifting",
+      price: 2500.00,
+      img: GiftBox1,
+      category: "gift-hampers"
+    },
+    {
+      id: 15,
+      name: "Harvest Delight",
+      description: "Elegant packaging for business gifting",
+      price: 2200.00,
+      img: GiftBox1,
+      category: "gift-hampers"
+    },
+    // Row 2: id 14, id 18, id 12
+    {
+      id: 14,
+      name: "Exotic Dry Fruit Medley",
+      description: "Elegant packaging for business gifting",
+      price: 1200.00,
+      img: GiftBox1,
+      category: "gift-hampers"
+    },
+    {
+      id: 18,
+      name: "Lumina Nut Wooden Crate",
+      description: "Elegant packaging for business gifting",
+      price: 3800.00,
+      img: GiftBox1,
+      category: "gift-hampers"
+    },
+    {
+      id: 12,
+      name: "Nutty Treats",
+      description: "Perfect for anniversaries & special moments",
+      price: 1200.00,
+      img: GiftBox1,
+      category: "gift-hampers"
+    },
+    // Row 3: id 20, id 11, id 13
+    {
+      id: 20,
+      name: "Nutri Blossom",
+      description: "Elegant packaging for business gifting",
+      price: 1400.00,
+      img: GiftBox1,
+      category: "gift-hampers"
+    },
+    {
+      id: 11,
+      name: "Festive Bites",
+      description: "Premium assortment with truffles, bars & dry fruits",
+      price: 1200.00,
+      img: GiftBox1,
+      category: "gift-hampers"
+    },
+    {
+      id: 13,
+      name: "Grand Nutty",
+      description: "Large collection for family gatherings & parties",
+      price: 1600.00,
+      img: GiftBox1,
+      category: "gift-hampers"
+    },
+    // Row 4: id 16
+    {
+      id: 16,
+      name: "Natures Delight",
+      description: "Elegant packaging for business gifting",
+      price: 1500.00,
+      img: GiftBox1,
+      category: "gift-hampers"
     }
   ];
 
@@ -349,47 +466,226 @@ const ChocolateStore = ({
     </section>
   );
 
-  const ProductCard = React.memo(({ product }) => (
-    <div className="product-card">
-      <div className="product-image">
-        <img src={product.img} alt={product.name} className="product-img" />
-        <div className="product-overlay">
-          <button 
-            className="quick-add"
-            onClick={() => handleAddToCart(product)}
-          >
-            ✨ Quick Add
-          </button>
-        </div>
-      </div>
-      <div className="product-info">
-        <h3 className="product-name">{product.name}</h3>
-        <p className="product-description">{product.description}</p>
-        <div className="product-footer">
-          <span className="product-price">₹{product.price}</span>
-          <button 
-            className="add-to-cart"
-            onClick={() => handleAddToCart(product)}
-          >
-            Add to Cart 🛒
-          </button>
-        </div>
-      </div>
-    </div>
-  ));
+  const ProductCard = React.memo(({ product }) => {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    
+    // For gift hampers, use different images based on product ID
+    const productImages = product.category === "gift-hampers" 
+      ? product.id === 12 
+        ? [GiftBox3, GiftBox4] // Product 2 (Romantic Couple's Gift Box) uses GiftBox3 and GiftBox4
+        : product.id === 13
+        ? [GiftBox5, GiftBox6] // Product 3 (Family Celebration Hamper) uses GiftBox5 and GiftBox6
+        : product.id === 14
+        ? [GiftBox7, GiftBox8] // Product 4 uses GiftBox7 and GiftBox8
+        : product.id === 15
+        ? [GiftBox9, GiftBox10] // Product 5 uses GiftBox9 and GiftBox10
+        : product.id === 16
+        ? [GiftBox11, GiftBox12] // Product 6 uses GiftBox11 and GiftBox12
+        : product.id === 17
+        ? [GiftBox13, GiftBox14] // Product 7 uses GiftBox13 and GiftBox14
+        : product.id === 18
+        ? [GiftBox15, GiftBox16] // Product 8 uses GiftBox15 and GiftBox16
+        : product.id === 19
+        ? [GiftBox17, GiftBox18] // Product 9 uses GiftBox17 and GiftBox18
+        : product.id === 20
+        ? [GiftBox19, GiftBox20] // Product 10 uses GiftBox19 and GiftBox20
+        : [GiftBox1, GiftBox2] // Other gift hampers use GiftBox1 and GiftBox2
+      : [product.img]; // Single image for chocolates
+    
+    const nextImage = useCallback(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
+    }, [productImages.length]);
+    
+    const prevImage = () => {
+      setCurrentImageIndex((prev) => (prev - 1 + productImages.length) % productImages.length);
+    };
+    
+    const goToImage = (index) => {
+      setCurrentImageIndex(index);
+    };
 
-  const Products = () => (
-    <section className="products-section">
-      <div className="container">
-        <h2 className="section-title">Our Delicious Collection</h2>
-        <div className="products-grid">
-          {products.map(product => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+    return (
+      <div className="product-card">
+        <div className="product-image">
+          <img 
+            src={productImages[currentImageIndex]} 
+            alt={product.name} 
+            className="product-img" 
+          />
+          
+          {/* Navigation arrows for gift hampers */}
+          {product.category === "gift-hampers" && productImages.length > 1 && (
+            <>
+              <button 
+                className="slide-arrow slide-arrow-left"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevImage();
+                }}
+              >
+                ‹
+              </button>
+              <button 
+                className="slide-arrow slide-arrow-right"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextImage();
+                }}
+              >
+                ›
+              </button>
+            </>
+          )}
+          
+          {/* Dots indicator for gift hampers */}
+          {product.category === "gift-hampers" && productImages.length > 1 && (
+            <div className="slide-dots">
+              {productImages.map((_, index) => (
+                <button
+                  key={index}
+                  className={`slide-dot ${index === currentImageIndex ? 'active' : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToImage(index);
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="product-info">
+          <h3 className="product-name">{product.name}</h3>
+          <p className="product-description">{product.description}</p>
+          <div className="product-footer">
+            <span className="product-price">₹{product.price}</span>
+            <button 
+              className="add-to-cart"
+              onClick={() => handleAddToCart(product)}
+            >
+              Add to Cart 🛒
+            </button>
+          </div>
         </div>
       </div>
-    </section>
-  );
+    );
+  });
+
+  const Products = () => {
+    const chocolateProducts = products.filter(product => product.category === "chocolates");
+    const giftHamperProducts = products.filter(product => product.category === "gift-hampers");
+
+    const handleCategoryToggle = (category) => {
+      setActiveProductCategory(category);
+      setSortBy('default'); // Reset sort when changing categories
+      
+      // Auto-scroll to products section with 5ms delay
+      setTimeout(() => {
+        const productsSection = document.querySelector('.products-section');
+        if (productsSection) {
+          // Add offset for better visibility
+          const targetScroll = productsSection.offsetTop - 100; // 100px offset from top
+          
+          window.scrollTo({
+            top: targetScroll,
+            behavior: 'smooth'
+          });
+        }
+      }, 5);
+    };
+
+    const handleSort = (sortType) => {
+      setSortBy(sortType);
+    };
+
+    const sortProducts = (productList) => {
+      switch (sortBy) {
+        case 'price-high-low':
+          return [...productList].sort((a, b) => b.price - a.price);
+        case 'price-low-high':
+          return [...productList].sort((a, b) => a.price - b.price);
+        default:
+          return productList;
+      }
+    };
+
+    const sortedChocolateProducts = sortProducts(chocolateProducts);
+    const sortedGiftHamperProducts = sortProducts(giftHamperProducts);
+
+    return (
+      <section className="products-section">
+        <div className="container">
+          <h2 className="section-title">Our Delicious Collection</h2>
+          
+          {/* Category Toggle */}
+          <div className="category-toggle">
+            <button 
+              className={`toggle-btn ${activeProductCategory === 'gift-hampers' ? 'active' : ''}`}
+              onClick={() => handleCategoryToggle('gift-hampers')}
+            >
+              🎁 Hampers
+            </button>
+            <button 
+              className={`toggle-btn ${activeProductCategory === 'chocolates' ? 'active' : ''}`}
+              onClick={() => handleCategoryToggle('chocolates')}
+            >
+              🍫 Chocolates
+            </button>
+          </div>
+
+          {/* Sort By Tab */}
+          <div className="sort-section">
+            <div className="sort-label">Sort by:</div>
+            <div className="sort-options">
+              <button 
+                className={`sort-btn ${sortBy === 'default' ? 'active' : ''}`}
+                onClick={() => handleSort('default')}
+              >
+                Default
+              </button>
+              <button 
+                className={`sort-btn ${sortBy === 'price-high-low' ? 'active' : ''}`}
+                onClick={() => handleSort('price-high-low')}
+              >
+                Price: High to Low
+              </button>
+              <button 
+                className={`sort-btn ${sortBy === 'price-low-high' ? 'active' : ''}`}
+                onClick={() => handleSort('price-low-high')}
+              >
+                Price: Low to High
+              </button>
+            </div>
+          </div>
+
+          {/* Chocolates Section */}
+          {activeProductCategory === 'chocolates' && (
+            <div className="category-section">
+              <h3 className="category-title">🍫 Handcrafted Chocolates</h3>
+              <p className="category-description">Discover our premium selection of artisanal chocolates, each crafted with love and the finest ingredients.</p>
+              <div className="products-grid">
+                {sortedChocolateProducts.map(product => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Gift Hampers Section */}
+          {activeProductCategory === 'gift-hampers' && (
+            <div className="category-section">
+              <h3 className="category-title">🎁 Hampers Collections</h3>
+              <p className="category-description">Perfect for every occasion - from romantic gestures to corporate gifting, our hampers are thoughtfully curated.</p>
+              <div className="products-grid">
+                {sortedGiftHamperProducts.map(product => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  };
 
   const About = () => (
     <section className="about-section">
